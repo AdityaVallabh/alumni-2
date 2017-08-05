@@ -13,6 +13,9 @@ from .forms import User_SocialLinksForm, User_MiscInfoForm, User_BasicInfoForm
 
 
 # Create your views here.
+def index(request):
+    return render(request, 'index.html')
+
 def view_basic(request, username):
     user = get_object_or_404(User, username=username)
     profile = UserProfile.objects.get(user=user)

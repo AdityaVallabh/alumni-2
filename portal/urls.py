@@ -4,6 +4,8 @@ from . import views
 
 
 urlpatterns = [
+
+    url(r'^index', views.index,name= 'index_page'),
     url(r'^(?P<username>\w+)/basic', views.view_basic, name='get-user-basic'),
     url(r'^(?P<username>\w+)/social', views.view_social, name='get-user-social'),
     url(r'^(?P<username>\w+)/misc', views.view_misc, name='get-user-misc'),
