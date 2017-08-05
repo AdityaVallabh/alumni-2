@@ -45,6 +45,17 @@ def view_misc(request, username):
     context['username'] = user.username
     return render(request, 'generic_display.html', context)
 
+def view_work_experience(request, username):
+    user = get_object_or_404(User, username=username)
+    experiences = WorkExperience.objects.get(user=user)
+
+    context = {
+        key: getattr(experiences, key, None)
+        for key in WorkExperienceForm.Meta.fields
+    }
+
+    context['work_experience'] = experiences
+    return render(request, 'generic_display.html', context)
 
 @login_required
 def update_basic(request):
@@ -129,3 +140,7 @@ def update_misc(request):
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
+
+@login_required
+def update_work_experience(request):
+    return render(request, 'generic_edit.html', context)
