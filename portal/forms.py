@@ -15,8 +15,8 @@ class User_MiscInfoForm(ModelForm):
         model = UserProfile
         fields = ['email_2', 'phone_1', 'phone_2', 'marital_status',
                   'blood_group', 'photograph', 'nationality',
-                  'permanent_address', 'scope_permanent_address',
-                  'current_address', 'scope_current_address']
+                  'scope_permanent_address', # removed address themselves
+                  'scope_current_address']
 
 
 class User_SocialLinksForm(ModelForm):
