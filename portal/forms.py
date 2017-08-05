@@ -4,11 +4,6 @@ import django.forms as forms
 from .models import User, UserProfile, Qualification, Address, WorkExperience
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=100, widget=forms.TextInput)
-    password = forms.CharField(widget=forms.PasswordInput)
-
-
 class User_BasicInfoForm(ModelForm):
     class Meta:
         model = UserProfile

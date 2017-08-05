@@ -18,7 +18,7 @@ def view_basic(request, username):
     profile = UserProfile.objects.get(user=user)
     context = {
         key: getattr(profile, key, None)
-        for key in User_SocialLinksForm.meta.fields
+        for key in User_BasicInfoForm.Meta.fields
     }
     context['username'] = user.username
     return render(request, 'generic_display.html', context)
@@ -29,7 +29,7 @@ def view_social(request, username):
     profile = UserProfile.objects.get(user=user)
     context = {
         key: getattr(profile, key, None)
-        for key in User_SocialLinksForm.meta.fields
+        for key in User_SocialLinksForm.Meta.fields
     }
     context['username'] = user.username
     return render(request, 'generic_display.html', context)
@@ -40,7 +40,7 @@ def view_misc(request, username):
     profile = UserProfile.objects.get(user=user)
     context = {
         key: getattr(profile, key, None)
-        for key in User_SocialLinksForm.meta.fields
+        for key in User_MiscInfoForm.Meta.fields
     }
     context['username'] = user.username
     return render(request, 'generic_display.html', context)
@@ -65,12 +65,16 @@ def update_basic(request):
             context['form'] = User_BasicInfoForm(initial=model_to_dict(profile))
         return render(request, 'generic_edit.html', context)
     else:
-        form = User_BasicInfoForm(request.POST, instance=profile)
+        if profile is None:
+            form = User_BasicInfoForm(request.POST)
+        else:
+            form = User_BasicInfoForm(request.POST, instance=profile)
         if form.is_valid():
-            print('saving form')
             form.save()
-            return redirect('/')
-        return HttpResponse('invalid form')
+            return redirect(reverse(view_basic, args=[context.get('username')]))
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
 
 
 @login_required
@@ -94,8 +98,11 @@ def update_social(request):
         form = User_SocialLinksForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
+            return redirect(reverse(view_social, args=[context.get('username')]))
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
 
-            return redirect('/')
 
 @login_required
 def update_misc(request):
@@ -119,3 +126,6 @@ def update_misc(request):
         if form.is_valid():
             form.save()
             return redirect('/')
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
