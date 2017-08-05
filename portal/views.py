@@ -224,4 +224,4 @@ def add_work_experience(request, username):
 
 @login_required
 def update_work_experience(request):
-return render(request, 'generic_edit.html', context)
+    return render(request, 'generic_edit.html', context)
