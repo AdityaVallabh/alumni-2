@@ -64,11 +64,11 @@ class Address(models.Model):
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=20)
-    user_roll_no = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
 
     def __str__(self):
         return "{} | {}, {}, {}".format(
-            self.user_roll_no,
+            self.username,
             self.address_line_1,
             self.city,
             self.country
@@ -143,6 +143,7 @@ class UserProfile(models.Model):
 
 class Qualification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     program_code = models.SmallIntegerField(choices=AcademicProgram.choices(), null=True)
     institute_name = models.CharField(max_length=200)
     start_date = models.DateField()
@@ -152,6 +153,7 @@ class Qualification(models.Model):
 
 class WorkExperience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     employer = models.CharField(max_length=150)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)

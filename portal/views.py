@@ -10,7 +10,7 @@ import django.forms as forms
 from .models import UserProfile, Address, Qualification, WorkExperience
 
 from .forms import User_SocialLinksForm, User_MiscInfoForm, User_BasicInfoForm
-from .forms import AddressForm, WorkExperienceForm, QualificationForm
+from .forms import AddressForm, WorkExperienceForm, QualificationForm, WorkExperienceModelForm
 
 
 # Create your views here.
@@ -51,15 +51,8 @@ def view_misc(request, username):
 
 def view_work_experience(request, username):
     user = get_object_or_404(User, username=username)
-    experiences = WorkExperience.objects.get(user=user)
-
-    context = {
-        key: getattr(experiences, key, None)
-        for key in WorkExperienceForm.Meta.fields
-    }
-
-    context['work_experience'] = experiences
-    return render(request, 'generic_display.html', context)
+    experiences = WorkExperience.objects.filter(user=user)
+    return render(request, 'experience.html', context={'experiences': experiences})
 
 
 @login_required
@@ -213,12 +206,101 @@ def update_current_address(request, username):
         return render(request, 'generic_edit.html', context)
 
 
+
+@login_required
+def update_address(request, pk):
+    try:
+        address = Address.objects.get(pk=pk)
+    except Address.DidNotFound:
+        address = None
+    else:
+        if address.username != request.user.username:
+            return HttpResponse('Unauthorized', status=401)
+
+    context = {
+        'form': None,
+        'username': request.user.username,
+        'submit_url': reverse(update_address, args=[pk])
+    }
+
+    if request.method == 'GET':
+        if address is None:
+            context['form'] = AddressForm()
+        else:
+            context['form'] = AddressForm(initial=model_to_dict(address))
+        return render(request, 'generic_edit.html', context)
+    else:
+        form = None
+        if address is None:
+            form = AddressForm(request.POST)
+        else:
+            form = AddressForm(request.POST, instance=address)
+        addr = form.save(commit=False)
+        addr.username = request.user.username
+        addr.save()
+        return HttpResponse(addr.pk, status=200)
+
+
 @login_required
 def add_work_experience(request, username):
     if username != request.user.username:
         return HttpResponse('Unauthorized', status=401)
 
+    context = {
+        'username': username,
+        'form': None,
+        'submit_url': reverse(add_work_experience, args=[username])
+    }
+    if request.method == 'POST':
+        form = WorkExperienceForm(request.POST)
+        if form.is_valid():
+            exp = WorkExperience(employer=request.POST.get('employer'),
+                                 start_date=request.POST.get('start_date'),
+                                 end_date=request.POST.get('end_date'),
+                                 sector=request.POST.get('sector'),
+                                 designation=request.POST.get('designation'),
+                                 founder=True
+                                 if request.POST.get('founder') is 'on' else False)
+            exp.user = request.user
+            exp.location = Address.objects.get(pk=request.POST.get('address_pk'))
+            exp.save()
+            return redirect(view_work_experience, username=username)
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
+    else:
+        context['form'] = WorkExperienceForm()
+        return render(request, 'generic_edit.html', context)
+
 
 @login_required
-def update_work_experience(request):
-return render(request, 'generic_edit.html', context)
+def update_work_experience(request, username, idx=0):
+    if username != request.user.username:
+        return HttpResponse('Unauthorized', status=401)
+    context = {
+        'username': request.user.username,
+        'form': None,
+        'submit_url': reverse(update_basic, args=[username])
+    }
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    if request.method == 'GET':
+        if profile is None:
+            context['form'] = User_BasicInfoForm()
+        else:
+            context['form'] = User_BasicInfoForm(initial=model_to_dict(profile))
+        return render(request, 'generic_edit.html', context)
+    else:
+        if profile is None:
+            form = User_BasicInfoForm(request.POST)
+        else:
+            form = User_BasicInfoForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse(view_basic, args=[context.get('username')]))
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
