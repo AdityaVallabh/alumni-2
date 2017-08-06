@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <form action="{{ submit_url }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_ul }}

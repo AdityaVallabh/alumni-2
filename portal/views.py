@@ -17,6 +17,9 @@ from .forms import AddressForm, WorkExperienceForm, QualificationForm
 def index(request):
     return render(request, 'index.html')
 
+def demo(request):
+    return render(request, 'demo.html')
+
 def view_basic(request, username):
     user = get_object_or_404(User, username=username)
     profile = UserProfile.objects.get(user=user)
