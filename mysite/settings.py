@@ -124,6 +124,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Email config
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'user@domain.com'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'user@domain.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
 
 # # The URL of the LDAP server.
@@ -181,9 +190,9 @@ STATIC_URL = '/static/'
 # LDAP_AUTH_CONNECTION_PASSWORD = None
 
 
-# # Hashtag Abhinava
+# Hashtag Abhinava
 # import ldap
-# from django_auth_ldap.config import LDAPSearch, GroupOfNamesTypes
+# from django_auth_ldap.config import LDAPSearch
 
 # main_dn = 'dc=iiita,dc=ac,dc=in'
 # groups_dn = 'ou=alumni,{}'.format(main_dn)
@@ -191,10 +200,10 @@ STATIC_URL = '/static/'
 
 # AUTHENTICATION_BACKENDS = (
 #     'django_auth_ldap.backend.LDAPBackend',
-#     'django.contrib.auth.backends.ModelBackend',
+#     # 'django.contrib.auth.backends.ModelBackend',
 # )
 
-# AUTH_LDAP_SERVER_URI = "ldaps://sldap.iiita.ac.in:636"
+# AUTH_LDAP_SERVER_URI = "172.31.1.43"
 # #change scope based on ldap schema
 # AUTH_LDAP_USER_SEARCH = LDAPSearch(main_dn, ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 # '''

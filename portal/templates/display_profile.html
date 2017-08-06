@@ -10,8 +10,13 @@
     </ul>
 
     <div class="tab-content tab-space">
+
         <div class="tab-pane active" id="pill1">
+        {% if user.username == username %}
+            <a class="btn btn-primary" href="{% url 'edit-user-basic' username=user.username %}">Edit</a>
+            {% endif %}
             <ul>
+                <h4 class="title"><li>Photograph: <img src="{{ photograph }}"></li></h4>
                 <h4 class="title"><li>User name: {{ username }}</li></h4>
                 <h4 class="title"><li>Name : {{ name }}</li></h4>
                 <h4 class="title"><li>Primary Email : {{ email_1 }}</li></h4>
@@ -19,7 +24,11 @@
                 <h4 class="title"><li>Gender : {{ gender }}</li></h4>
             </ul>
         </div>
+
         <div class="tab-pane" id="pill2">
+            {% if user.username == username %}
+            <a class="btn btn-primary" href="{% url 'edit-user-social' username=user.username %}">Edit</a>
+            {% endif %}
             <ul>
                 {% if scope_facebook in allowed_scopes %}
                 <h4 class="title"><li>Facebook: {{ link_facebook }}</li></h4>
@@ -42,15 +51,19 @@
                 <h4 class="title"><li>Website: {{ link_website }}</li></h4>
             </ul>
         </div>
+
         <div class="tab-pane" id="pill3">
             <ul>
+            {% if user.username == username %}
+                <a class="btn btn-primary" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
+                {% endif %}
                 <h4 class="title"><li>Email 2: {{ email_2 }}</li></h4>
                 <h4 class="title"><li>Phone 1: {{ phone_1 }}</li></h4>
                 <h4 class="title"><li>Phone 2: {{ phone_2 }}</li></h4>
                 <h4 class="title"><li>Marital Status: {{ marital_status }}</li></h4>
                 <h4 class="title"><li>Blood group: {{ blood_group }}</li></h4>
-                <h4 class="title"><li>Photograph: {{ photograph }}</li></h4>
                 <h4 class="title"><li>Nationality: {{ nationality }}</li></h4>
+
 
                 {% if scope_permanent_address in allowed_scopes %}
                 <h4 class="title">
@@ -63,6 +76,9 @@
                             <h6 class="title"><li>Country: {{ permanent_address.country }}</li></h6>
                             <h6 class="title"><li>Zip Code: {{ permanent_address.zip_code }}</li></h6>
                         </ul>
+                        {% if user.username == username %}
+                        <a class="btn btn-primary" href="{% url 'edit-permanent-address' username=user.username %}">Edit</a>
+                        {% endif %}
                     </li>
                 </h4>
                 {% endif %}
@@ -70,14 +86,17 @@
                 {% if scope_current_address in allowed_scopes %}
                 <h4 class="title">
                     <li>Current Address:
-                    <ul>
-                        <h6 class="title"><li>Address Line 1: {{ current_address.address_line_1 }}</li></h6>
-                        <h6 class="title"><li>Address Line 2: {{ current_address.address_line_2 }}</li></h6>
-                        <h6 class="title"><li>City: {{ current_address.city }}</li></h6>
-                        <h6 class="title"><li>State: {{ current_address.state }}</li></h6>
-                        <h6 class="title"><li>Country: {{ current_address.country }}</li></h6>
-                        <h6 class="title"><li>Zip Code: {{ current_address.zip_code }}</li></h6>
-                    </ul>
+                        <ul>
+                            <h6 class="title"><li>Address Line 1: {{ current_address.address_line_1 }}</li></h6>
+                            <h6 class="title"><li>Address Line 2: {{ current_address.address_line_2 }}</li></h6>
+                            <h6 class="title"><li>City: {{ current_address.city }}</li></h6>
+                            <h6 class="title"><li>State: {{ current_address.state }}</li></h6>
+                            <h6 class="title"><li>Country: {{ current_address.country }}</li></h6>
+                            <h6 class="title"><li>Zip Code: {{ current_address.zip_code }}</li></h6>
+                        </ul>
+                        {% if user.username == username %}
+                        <a class="btn btn-primary" href="{% url 'edit-current-address' username=user.username %}">Edit</a>
+                        {% endif %}
                     </li>
                 </h4>
                 {% endif %}

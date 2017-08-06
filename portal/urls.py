@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^(?P<username>\w+)/', views.view_basic, name='get-user-basic'),
+    url(r'^(?P<username>\w+)$', views.view_profile, name='get-user-info'),
     # url(r'^(?P<username>\w+)/social$', views.view_social, name='get-user-social'),
     # url(r'^(?P<username>\w+)/personal$', views.view_personal, name='get-user-personal'),
     url(r'^(?P<username>\w+)/work_experience$', views.view_work_experience, name='get-work-experience'),
@@ -24,6 +24,9 @@ urlpatterns = [
 
     url(r'^(?P<username>\w+)/work_experience/add$', views.add_work_experience, name='add-user-work-experience'),
     url(r'^(?P<username>\w+)/work_experience/delete/(?P<pk>\w+)', views.delete_work_experience, name='delete-work-experience'),
+
+    url(r'^(?P<username>\w+)/qualification/add$', views.add_qualification, name='add-user-qualification'),
+    url(r'^(?P<username>\w+)/qualification/delete/(?P<pk>\w+)', views.delete_qualification, name='delete-qualification'),
 
     url(r'^address/update/(?P<pk>\w+)$', views.update_address)
     # url(r'^(?P<username>\w+)/work_experience/edit', views.update_work_experience, name='edit-user-work-experience'),

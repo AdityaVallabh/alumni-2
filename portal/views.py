@@ -36,52 +36,62 @@ def demo(request):
     return render(request, 'demo.html')
 
 
-def view_basic(request, username):
+def view_profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = UserProfile.objects.get(user=user)
     context = {
         key: getattr(profile, key, None)
-        for key in User_BasicInfoForm.Meta.fields
+        for key in User_BasicInfoForm.Meta.fields +\
+                   User_SocialLinksForm.Meta.fields +\
+                   User_PersonalInfoForm.Meta.fields
     }
     context['gender'] = str(models.Gender(context['gender']))
     context['username'] = user.username
-    context['view_types'] = ['basic']
-    return render(request, 'display_profile.html', context)
-
-
-def view_social(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = UserProfile.objects.get(user=user)
-    context = {
-        key: getattr(profile, key, None)
-        for key in User_SocialLinksForm.Meta.fields
-    }
-    context['username'] = user.username
-    context['view_types'] = ['social']
-
-    return render(request, 'display_profile.html', context)
-
-
-def view_personal(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = UserProfile.objects.get(user=user)
-    context = {
-        key: getattr(profile, key, None)
-        for key in User_PersonalInfoForm.Meta.fields
-    }
-    context['username'] = user.username
     context['permanent_address'] = profile.permanent_address
     context['current_address'] = profile.current_address
-    context['view_types'] = ['misc']
+    context['view_types'] = ['basic']
 
     context['allowed_scopes'] = resolve_scope(request, username)
     return render(request, 'display_profile.html', context)
+
+
+# def view_profile(request, username):
+#     user = get_object_or_404(User, username=username)
+#     profile = UserProfile.objects.get(user=user)
+#     context = {
+#         key: getattr(profile, key, None)
+#         for key in User_SocialLinksForm.Meta.fields
+#     }
+#     context['username'] = user.username
+#     context['view_types'] = ['social']
+
+#     return render(request, 'display_profile.html', context)
+
+
+# def view_profile(request, username):
+#     user = get_object_or_404(User, username=username)
+#     profile = UserProfile.objects.get(user=user)
+#     context = {
+#         key: getattr(profile, key, None)
+#         for key in User_PersonalInfoForm.Meta.fields
+#     }
+#     context['username'] = user.username
+#     context['view_types'] = ['misc']
+
+#     context['allowed_scopes'] = resolve_scope(request, username)
+#     return render(request, 'display_profile.html', context)
 
 
 def view_work_experience(request, username):
     user = get_object_or_404(User, username=username)
     experiences = WorkExperience.objects.filter(user=user)
     return render(request, 'experience.html', context={'experiences': experiences})
+
+
+def view_qualifications(request, username):
+    user = get_object_or_404(User, username=username)
+    qualification = Qualification.objects.filter(user=user)
+    return render(request, 'experience.html', context={'qualifications': qualification})
 
 
 @login_required
@@ -111,7 +121,7 @@ def update_basic(request, username):
             form = User_BasicInfoForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect(reverse(view_basic, args=[context.get('username')]))
+            return redirect(reverse(view_profile, args=[context.get('username')]))
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -140,7 +150,7 @@ def update_social(request, username):
         form = User_SocialLinksForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect(reverse(view_social, args=[context.get('username')]))
+            return redirect(reverse(view_profile, args=[context.get('username')]))
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -169,7 +179,7 @@ def update_personal(request, username):
         form = User_PersonalInfoForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect(reverse(view_misc, args=[context.get('username')]))
+            return redirect(reverse(view_profile, args=[context.get('username')]))
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -193,7 +203,7 @@ def update_permanent_address(request, username):
         form = AddressForm(request.POST, instance=profile.permanent_address)
         if form.is_valid():
             form.save()
-            return redirect(view_misc, username=username)
+            return redirect(view_profile, username=username)
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -223,7 +233,7 @@ def update_current_address(request, username):
         form = AddressForm(request.POST, instance=profile.current_address)
         if form.is_valid():
             form.save()
-            return redirect(view_misc, username=username)
+            return redirect(view_profile, username=username)
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -304,6 +314,44 @@ def add_work_experience(request, username):
 
 @login_required
 def delete_work_experience(request, username, pk):
+    if username != request.user.username:
+        return HttpResponse('Unauthorized', status=401)
+
+    exp = get_object_or_404(WorkExperience, pk=pk)
+    if exp.user.username != request.user.username:
+        return HttpResponse('Unauthorized', status=401)
+
+    exp.delete()
+    return redirect(reverse(view_work_experience), args=[username])
+
+
+@login_required
+def add_qualification(request, username):
+    if username != request.user.username:
+        return HttpResponse('Unauthorized', status=401)
+
+    context = {
+        'username': username,
+        'form': None,
+        'submit_url': reverse(add_qualification, args=[username])
+    }
+    if request.method == 'POST':
+        form = QualificationForm(request.POST)
+        if form.is_valid():
+            qual = form.save(commit=False)
+            qual.user = request.user
+            qual.save()
+            return redirect(view_work_experience, username=username)
+        else:
+            context['form'] = form
+            return render(request, 'generic_edit.html', context)
+    else:
+        context['form'] = Qualification()
+        return render(request, 'generic_edit.html', context)
+
+
+@login_required
+def delete_qualification(request, username, pk):
     if username != request.user.username:
         return HttpResponse('Unauthorized', status=401)
 

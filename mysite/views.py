@@ -36,7 +36,7 @@ def login_view(request):
         return HttpResponse('Incorrect creds')
     else:
         login(request, user)
-        return HttpResponse('Login done')
+        return redirect('/portal/{}'.format(username))
 
 
 def logout_route(request):
