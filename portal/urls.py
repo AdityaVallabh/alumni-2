@@ -4,13 +4,13 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^(?P<username>\w+)/basic$', views.view_basic, name='get-user-basic'),
-    url(r'^(?P<username>\w+)/social$', views.view_social, name='get-user-social'),
-    url(r'^(?P<username>\w+)/personal$', views.view_personal, name='get-user-personal'),
+    url(r'^(?P<username>\w+)/', views.view_basic, name='get-user-basic'),
+    # url(r'^(?P<username>\w+)/social$', views.view_social, name='get-user-social'),
+    # url(r'^(?P<username>\w+)/personal$', views.view_personal, name='get-user-personal'),
     url(r'^(?P<username>\w+)/work_experience$', views.view_work_experience, name='get-work-experience'),
 
-    url(r'^$', views.index,name= 'index_page'),
-    url(r'^demo', views.demo,name= 'demo_page'),
+    url(r'^$', views.index,name= 'index'),
+    url(r'^demo', views.demo,name= 'demo'),
 
     url(r'^(?P<username>\w+)/permanent_address/edit$', views.update_permanent_address, name='edit-permanent-address'),
     url(r'^(?P<username>\w+)/current_address/edit$', views.update_current_address, name='edit-current-address'),

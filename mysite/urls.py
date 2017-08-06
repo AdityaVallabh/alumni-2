@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^portal/', include('portal.urls')),
     url(r'^signup/', views.signup),
     url(r'^login/', views.login_view),
-    url(r'^logout/', views.logout_route),
+    url(r'^logout/', views.logout_route, name="logout"),
 ]

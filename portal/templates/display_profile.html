@@ -4,17 +4,12 @@
 
 <div class="container">
     <ul class="nav nav-pills nav-pills-rose">
-        <li><a href="#pill1" id="#pill1" data-toggle="tab">Basic</a></li>
-        <li><a href="#pill2" id="#pill2" data-toggle="tab">Social</a></li>
-        <li><a href="#pill3" id="#pill3" data-toggle="tab">Personal</a></li>
+        <li class="active"><a href="#pill1" data-toggle="tab">Basic</a></li>
+        <li><a href="#pill2" data-toggle="tab">Social</a></li>
+        <li><a href="#pill3" data-toggle="tab">Personal</a></li>
     </ul>
 
     <div class="tab-content tab-space">
-        {% if 'basic' in view_types %}
-        <script>
-         document.getElementById('#pill1').className += ' active';
-         console.log(document.getElementById('#pill1').className);
-        </script>
         <div class="tab-pane active" id="pill1">
             <ul>
                 <h4 class="title"><li>User name: {{ username }}</li></h4>
@@ -24,13 +19,7 @@
                 <h4 class="title"><li>Gender : {{ gender }}</li></h4>
             </ul>
         </div>
-        {% endif %}
-
-        {% if 'social' in view_types %}
-        <script>
-         document.getElementById('#pill1').className += ' active';
-        </script>
-        <div class="tab-pane active" id="pill2">
+        <div class="tab-pane" id="pill2">
             <ul>
                 {% if scope_facebook in allowed_scopes %}
                 <h4 class="title"><li>Facebook: {{ link_facebook }}</li></h4>
@@ -53,13 +42,7 @@
                 <h4 class="title"><li>Website: {{ link_website }}</li></h4>
             </ul>
         </div>
-        {% endif %}
-
-        {% if 'misc' in view_types %}
-        <script>
-         document.getElementById('#pill1').className += ' active';
-        </script>
-        <div class="tab-pane active" id="pill3">
+        <div class="tab-pane" id="pill3">
             <ul>
                 <h4 class="title"><li>Email 2: {{ email_2 }}</li></h4>
                 <h4 class="title"><li>Phone 1: {{ phone_1 }}</li></h4>
@@ -100,6 +83,5 @@
                 {% endif %}
             </ul>
         </div>
-        {% endif %}
     </div>
     {% endblock %}
