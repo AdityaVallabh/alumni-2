@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^(?P<username>\w+)$', views.view_profile, name='get-user-info'),
     # url(r'^(?P<username>\w+)/social$', views.view_social, name='get-user-social'),
     # url(r'^(?P<username>\w+)/personal$', views.view_personal, name='get-user-personal'),
-    url(r'^$', views.index,name= 'index'),
+    # url(r'^$', views.index,name= 'index'),
     url(r'^demo$', views.demo,name= 'demo'),
     url(r'^location/enter$', views.location,name= 'location'),
 

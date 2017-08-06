@@ -6,7 +6,6 @@ from django.shortcuts import redirect, reverse, render
 from django.conf import settings
 import django.forms as forms
 
-
 def health(request):
     return HttpResponse("Hello world. I'm up and running.")
 
@@ -41,7 +40,7 @@ def login_view(request):
 
 def logout_route(request):
     logout(request)
-    return HttpResponse('Done')
+    return redirect('/')
 
 
 def requires_auth(request):

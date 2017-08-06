@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from . import views
-
+import portal
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^signup/', views.signup),
     url(r'^login/', views.login_view),
     url(r'^logout/', views.logout_route, name="logout"),
+    url(r'^$', portal.views.index,name= 'index'),
 ]
+
