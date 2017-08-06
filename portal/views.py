@@ -17,8 +17,10 @@ from .forms import AddressForm, WorkExperienceForm, QualificationForm, WorkExper
 def index(request):
     return render(request, 'index.html')
 
+
 def demo(request):
     return render(request, 'demo.html')
+
 
 def view_basic(request, username):
     user = get_object_or_404(User, username=username)
@@ -28,7 +30,8 @@ def view_basic(request, username):
         for key in User_BasicInfoForm.Meta.fields
     }
     context['username'] = user.username
-    return render(request, 'generic_display.html', context)
+    context['view_type'] = ['basic']
+    return render(request, 'display_profile.html', context)
 
 
 def view_social(request, username):
@@ -39,7 +42,8 @@ def view_social(request, username):
         for key in User_SocialLinksForm.Meta.fields
     }
     context['username'] = user.username
-    return render(request, 'generic_display.html', context)
+    context['view_type'] = ['social']
+    return render(request, 'display_profile.html', context)
 
 
 def view_misc(request, username):
@@ -52,7 +56,8 @@ def view_misc(request, username):
     context['username'] = user.username
     context['permanent_address'] = profile.permanent_address
     context['current_address'] = profile.current_address
-    return render(request, 'generic_display.html', context)
+    context['view_type'] = ['misc']
+    return render(request, 'display_profile.html', context)
 
 
 def view_work_experience(request, username):
