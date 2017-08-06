@@ -1,14 +1,37 @@
 {% extends "base.html" %}
-<form action="{{ submit_url }}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_ul }}
-    <button>Submit</button>
 
-    {% if form.errors %}
-    <ul>
-        {% for error in form.errors %}
-        <li>{{ error }}</li>
+{% block body %}
+
+<div class="container">
+    <form action="{{ submit_url }}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in form.visible_fields %}
+
+        <div class="form-group">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+        </div>
+
         {% endfor %}
-    </ul>
-    {% endif %}
-</form>
+
+        {% for field in form.hidden_fields %}
+        <div>
+            {{ field }}
+        </div>
+        {% endfor %}
+
+        <button>Submit</button>
+
+        {% if form.errors %}
+        <ul>
+            {% for error in form.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </form>
+</div>
+
+
+{% endblock %}
