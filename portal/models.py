@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+from uuid import uuid4 as uuid
 from os.path import splitext
 from enum import Enum
 
@@ -88,6 +90,12 @@ class Address(models.Model):
             self.city,
             self.country
         )
+
+
+class PasswordReset(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    reset_hash = models.CharField(default=uuid().hex, max_length=100)
+    expiry = models.DateTimeField(default=datetime.utcnow()+timedelta(days=2))
 
 
 class UserProfile(models.Model):

@@ -7,7 +7,7 @@ from .models import User, UserProfile, Qualification, Address, WorkExperience
 class User_BasicInfoForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['name', 'email_1', 'date_of_birth', 'gender']
+        fields = ['name', 'email_1', 'date_of_birth', 'gender', 'photograph']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +21,7 @@ class User_PersonalInfoForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ['email_2', 'phone_1', 'phone_2', 'marital_status',
-                  'blood_group', 'photograph', 'nationality',
+                  'blood_group', 'nationality',
                   'scope_permanent_address', # removed address themselves
                   'scope_current_address']
 
