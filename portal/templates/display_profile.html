@@ -11,9 +11,9 @@
     <ul class="nav nav-pills nav-pills-rose">
         <li class="active"><a href="#pill1" data-toggle="tab">Basic</a></li>
         <!-- <li><a href="#pill2" data-toggle="tab">Social</a></li> -->
-        <li><a href="#pill3" data-toggle="tab">Personal</a></li>
+        <li><a href="#pill2" data-toggle="tab">Personal</a></li>
+        <li><a href="#pill3" data-toggle="tab">Work Experience</a></li>
         <li><a href="#pill4" data-toggle="tab">Educational Qualifications</a></li>
-        <li><a href="#pill5" data-toggle="tab">Work Experience</a></li>
     </ul>
 
     <div class="tab-content tab-space">
@@ -128,7 +128,7 @@
         </div>
 
 
-        <div class="tab-pane" id="pill3">
+        <div class="tab-pane" id="pill2">
 
             {% if user.username == username %}
             <a class="btn btn-primary btn-sm" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
@@ -241,7 +241,7 @@
         </div>
 
 
-        <div class="tab-pane active" id="pill4">
+        <div class="tab-pane" id="pill3">
 
             {% if user.username == username %}
             <a class="btn btn-primary btn-sm" href="{% url 'add-work-experience' username=user.username %}">Add more...</a>
@@ -282,10 +282,10 @@
         </div>
 
 
-        <div class="tab-pane active" id="pill5">
+        <div class="tab-pane" id="pill4">
 
             {% if user.username == username %}
-            <a class="btn btn-primary btn-sm" href="btn btn-primary">Add more...</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'add-user-qualification' username=user.username %}">Add more...</a>
             {% endif %}
 
             <div style="container">
