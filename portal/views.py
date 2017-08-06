@@ -25,6 +25,9 @@ def resolve_scope(request, username):
 
 
 # Create your views here.
+def location(request):
+    return render(request, 'location.html')
+
 def index(request):
     return render(request, 'index.html')
 

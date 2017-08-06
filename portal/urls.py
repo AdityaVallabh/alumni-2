@@ -11,6 +11,7 @@ urlpatterns = [
 
     url(r'^$', views.index,name= 'index'),
     url(r'^demo', views.demo,name= 'demo'),
+    url(r'^location', views.location,name= 'location'),
 
     url(r'^(?P<username>\w+)/permanent_address/edit$', views.update_permanent_address, name='edit-permanent-address'),
     url(r'^(?P<username>\w+)/current_address/edit$', views.update_current_address, name='edit-current-address'),

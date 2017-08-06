@@ -1,0 +1,87 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>typeahead-addresspicker.js</title>
+  <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{%static "css/styles.css" %}">
+</head>
+
+<body>
+    <div id="main">
+      <div class="address-panel">
+        <input id="address1" class="typeahead" type="text" placeholder="Enter a city">
+        <h4>Response</h4>
+        <pre class="response" id="response1">
+        </pre>
+      </div>
+      <div style="clear:both"></div>
+
+    </div>
+  </div>
+
+ <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBVrSg4njrEoCofqhB-7w9RWv3wAr4uSb8&v=3.exp&sensor=false&libraries=places"></script>
+ <script src="{%static "js/jquery.min.js" %}"></script>
+ <script src="{%static "js/bloodhound.js" %}"></script>
+ <script src="{%static "js/typeahead.jquery.js" %}"></script>
+ <script src="{%static "js/typeahead-addresspicker.js" %}"></script>
+ <script>
+  function displayResults(result, div) {
+    html = ["Address: " + result.address()]
+    html.push("Latitude: " + result.lat())
+    html.push("Longitude: " + result.lng())
+    html.push("Long names:")
+    result.addressTypes().forEach(function(type) {
+      html.push("  " + type + ": " + result.nameForType(type))
+    })
+    html.push("Short names:")
+    result.addressTypes().forEach(function(type) {
+      html.push("  " + type + ": " + result.nameForType(type, true))
+    })
+    html.push('Location selected');
+    div.html( html.join('\n'));
+  }
+
+  $( function() {
+    var addressPicker = new AddressPicker();
+    $('#address1').typeahead(null, {
+      displayKey: 'description',
+      source: addressPicker.ttAdapter()
+    });
+    addressPicker.bindDefaultTypeaheadEvent($('#address1'))
+    $(addressPicker).on('addresspicker:selected', function (event, result) { displayResults(result, $('#response1'))})
+    $(addressPicker).on('addresspicker:predictions', function(event, result) {
+      if (result && result.length > 0)
+        $('#address1').removeClass("empty")
+      else
+        $('#address1').addClass("empty")
+    })
+  })
+
+  $( function() {
+    // instantiate the addressPicker suggestion engine (based on bloodhound)
+    var addressPicker = new AddressPicker({map: {id: '#map'}, marker: {draggable: true, visible: true}, zoomForLocation: 18, reverseGeocoding: true});
+
+    // instantiate the typeahead UI
+    $('#address2').typeahead(null, {
+      displayKey: 'description',
+      source: addressPicker.ttAdapter()
+    });
+    addressPicker.bindDefaultTypeaheadEvent($('#address2'))
+    $(addressPicker).on('addresspicker:selected', function (event, result) {
+      displayResults(result, $('#response2'))
+      if (result.isReverseGeocoding()) {
+        $('#address2').val(result.address())
+      }
+    });
+  })
+
+
+  </script>
+
+</body>
+</html>
