@@ -16,11 +16,14 @@ class Choice(object):
             return None
 
 
+
 class Gender(int, Choice, Enum):
     male = 0
     female = 1
     others = 2
 
+    def __str__(self):
+        return self.name.capitalize()
 
 class BloodGroup(int, Choice, Enum):
     A = 0
@@ -28,10 +31,16 @@ class BloodGroup(int, Choice, Enum):
     AB = 2
     O = 3
 
+    def __str__(self):
+        return self.name.capitalize()
+
 
 class MaritalStatus(int, Choice, Enum):
     married = 0
     single = 1
+
+    def __str__(self):
+        return self.name.capitalize()
 
 
 class AcademicProgram(int, Choice, Enum):
@@ -40,11 +49,17 @@ class AcademicProgram(int, Choice, Enum):
     doctoral = 2
     dual_degree = 3
 
+    def __str__(self):
+        return self.name.capitalize()
+
 
 class Visibility(int, Choice, Enum):
     public = 0
     only_me = 1
     iiita = 2
+
+    def __str__(self):
+        return self.name.capitalize()
 
 
 def get_default_scope(scope=Visibility.iiita, null=True):

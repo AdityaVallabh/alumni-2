@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     url(r'^(?P<username>\w+)/basic$', views.view_basic, name='get-user-basic'),
     url(r'^(?P<username>\w+)/social$', views.view_social, name='get-user-social'),
-    url(r'^(?P<username>\w+)/misc$', views.view_misc, name='get-user-misc'),
+    url(r'^(?P<username>\w+)/personal$', views.view_personal, name='get-user-personal'),
     url(r'^(?P<username>\w+)/work_experience$', views.view_work_experience, name='get-work-experience'),
 
     url(r'^$', views.index,name= 'index_page'),
@@ -19,7 +19,7 @@ urlpatterns = [
 
     url(r'^(?P<username>\w+)/basic/edit$', views.update_basic, name='edit-user-basic'),
     url(r'^(?P<username>\w+)/social/edit$', views.update_social, name='edit-user-social'),
-    url(r'^(?P<username>\w+)/misc/edit$', views.update_misc, name='edit-user-misc'),
+    url(r'^(?P<username>\w+)/personal/edit$', views.update_personal, name='edit-user-personal'),
 
     url(r'^(?P<username>\w+)/work_experience/add$', views.add_work_experience, name='add-user-work-experience'),
     url(r'^(?P<username>\w+)/work_experience/delete/(?P<pk>\w+)', views.delete_work_experience, name='delete-work-experience'),

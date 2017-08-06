@@ -17,7 +17,7 @@ class User_BasicInfoForm(ModelForm):
         })
 
 
-class User_MiscInfoForm(ModelForm):
+class User_PersonalInfoForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ['email_2', 'phone_1', 'phone_2', 'marital_status',

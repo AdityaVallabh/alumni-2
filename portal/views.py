@@ -7,10 +7,21 @@ from django.conf import settings
 from django.forms.models import model_to_dict
 import django.forms as forms
 
+from . import models
 from .models import UserProfile, Address, Qualification, WorkExperience
 
-from .forms import User_SocialLinksForm, User_MiscInfoForm, User_BasicInfoForm
+from .forms import User_SocialLinksForm, User_PersonalInfoForm, User_BasicInfoForm
 from .forms import AddressForm, WorkExperienceForm, QualificationForm, WorkExperienceModelForm
+
+
+def resolve_scope(request, username):
+    allowed_scopes = [models.Visibility.public.value]
+    if request.user.is_authenticated:
+        allowed_scopes.append(models.Visibility.iiita.value)
+
+    if request.user.username in ['admin', username]:
+        allowed_scopes.append(models.Visibility.only_me.value)
+    return allowed_scopes
 
 
 # Create your views here.
@@ -29,8 +40,9 @@ def view_basic(request, username):
         key: getattr(profile, key, None)
         for key in User_BasicInfoForm.Meta.fields
     }
+    context['gender'] = str(models.Gender(context['gender']))
     context['username'] = user.username
-    context['view_type'] = ['basic']
+    context['view_types'] = ['basic']
     return render(request, 'display_profile.html', context)
 
 
@@ -42,21 +54,24 @@ def view_social(request, username):
         for key in User_SocialLinksForm.Meta.fields
     }
     context['username'] = user.username
-    context['view_type'] = ['social']
+    context['view_types'] = ['social']
+
     return render(request, 'display_profile.html', context)
 
 
-def view_misc(request, username):
+def view_personal(request, username):
     user = get_object_or_404(User, username=username)
     profile = UserProfile.objects.get(user=user)
     context = {
         key: getattr(profile, key, None)
-        for key in User_MiscInfoForm.Meta.fields
+        for key in User_PersonalInfoForm.Meta.fields
     }
     context['username'] = user.username
     context['permanent_address'] = profile.permanent_address
     context['current_address'] = profile.current_address
-    context['view_type'] = ['misc']
+    context['view_types'] = ['misc']
+
+    context['allowed_scopes'] = resolve_scope(request, username)
     return render(request, 'display_profile.html', context)
 
 
@@ -129,13 +144,13 @@ def update_social(request, username):
 
 
 @login_required
-def update_misc(request, username):
+def update_personal(request, username):
     if username != request.user.username:
         return HttpResponse('Unauthorized', status=401)
     context = {
         'username': request.user.username,
         'form': None,
-        'submit_url': reverse(update_misc, args=[username])
+        'submit_url': reverse(update_personal, args=[username])
     }
     try:
         profile = UserProfile.objects.get(user=request.user)
@@ -143,12 +158,12 @@ def update_misc(request, username):
         profile = None
     if request.method == 'GET':
         if profile is None:
-            context['form'] = User_MiscInfoForm()
+            context['form'] = User_PersonalInfoForm()
         else:
-            context['form'] = User_MiscInfoForm(initial=model_to_dict(profile))
+            context['form'] = User_PersonalInfoForm(initial=model_to_dict(profile))
         return render(request, 'generic_edit.html', context)
     else:
-        form = User_MiscInfoForm(request.POST, request.FILES, instance=profile)
+        form = User_PersonalInfoForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect(reverse(view_misc, args=[context.get('username')]))
