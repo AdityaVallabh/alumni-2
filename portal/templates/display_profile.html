@@ -7,14 +7,17 @@
         <li class="active"><a href="#pill1" data-toggle="tab">Basic</a></li>
         <li><a href="#pill2" data-toggle="tab">Social</a></li>
         <li><a href="#pill3" data-toggle="tab">Personal</a></li>
+        <li><a href="#pill4" data-toggle="tab">Educational Qualifications</a></li>
+        <li><a href="#pill5" data-toggle="tab">Work Experience</a></li>
     </ul>
 
     <div class="tab-content tab-space">
 
         <div class="tab-pane active" id="pill1">
-        {% if user.username == username %}
-            <a class="btn btn-primary" href="{% url 'edit-user-basic' username=user.username %}">Edit</a>
+            {% if user.username == username %}
+            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-basic' username=user.username %}">Edit</a>
             {% endif %}
+
             <ul>
                 <h4 class="title"><li>Photograph: <img src="{{ photograph }}"></li></h4>
                 <h4 class="title"><li>User name: {{ username }}</li></h4>
@@ -26,9 +29,11 @@
         </div>
 
         <div class="tab-pane" id="pill2">
+
             {% if user.username == username %}
-            <a class="btn btn-primary" href="{% url 'edit-user-social' username=user.username %}">Edit</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-social' username=user.username %}">Edit</a>
             {% endif %}
+
             <ul>
                 {% if scope_facebook in allowed_scopes %}
                 <h4 class="title"><li>Facebook: {{ link_facebook }}</li></h4>
@@ -54,9 +59,11 @@
 
         <div class="tab-pane" id="pill3">
             <ul>
-            {% if user.username == username %}
-                <a class="btn btn-primary" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
+
+                {% if user.username == username %}
+                <a class="btn btn-primary btn-sm" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
                 {% endif %}
+
                 <h4 class="title"><li>Email 2: {{ email_2 }}</li></h4>
                 <h4 class="title"><li>Phone 1: {{ phone_1 }}</li></h4>
                 <h4 class="title"><li>Phone 2: {{ phone_2 }}</li></h4>
@@ -76,9 +83,11 @@
                             <h6 class="title"><li>Country: {{ permanent_address.country }}</li></h6>
                             <h6 class="title"><li>Zip Code: {{ permanent_address.zip_code }}</li></h6>
                         </ul>
+
                         {% if user.username == username %}
                         <a class="btn btn-primary" href="{% url 'edit-permanent-address' username=user.username %}">Edit</a>
                         {% endif %}
+
                     </li>
                 </h4>
                 {% endif %}
@@ -94,13 +103,97 @@
                             <h6 class="title"><li>Country: {{ current_address.country }}</li></h6>
                             <h6 class="title"><li>Zip Code: {{ current_address.zip_code }}</li></h6>
                         </ul>
+
                         {% if user.username == username %}
                         <a class="btn btn-primary" href="{% url 'edit-current-address' username=user.username %}">Edit</a>
                         {% endif %}
+
                     </li>
                 </h4>
                 {% endif %}
             </ul>
         </div>
+
+
+        <div class="tab-pane active" id="pill4">
+
+            {% if user.username == username %}
+            <a class="btn btn-primary btn-sm" href="{% url 'add-work-experience' username=user.username %}">Add more...</a>
+            {% endif %}
+
+            <div style="container">
+                <div class="row">
+
+                    {% for ex in experiences %}
+                    <div class="col-md-5 col-lg-5" style="font-weight: 400">
+                        <div class="card">
+
+                            <div class="card-content">
+                                {{ ex.employer }} | {{ ex.sector }}
+                                <br/>
+                                {{ ex.designation }}
+
+                                {% if start_date or end_date %}
+                                {{ start_date }} to {{ end_date }}
+                                {% endif %}
+
+                                <br/>
+                                {{ location }}
+                            </div>
+
+                            {% if user.username == username %}
+                            <a class="btn btn-simple" href="{% url 'delete-qualification' username=user.username pk=ex.pk %}">DELETE</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-2"></div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="tab-pane active" id="pill5">
+
+            {% if user.username == username %}
+            <a class="btn btn-primary btn-sm" href="btn btn-primary">Add more...</a>
+            {% endif %}
+
+            <div style="container">
+                <div class="row">
+
+                    {% for q in qualifications %}
+                    <div class="col-md-5 col-lg-5" style="font-weight: 400">
+                        <div class="card">
+
+                            <div class="card-content">
+                                {{ q.program }} <br/>
+                                {{ q.institute_name }} <br/>
+
+                                {% if start_date or end_date %}
+                                {{ start_date }} to {{ end_date }}
+                                {% endif %}
+
+                                Convocation: {{ convocation_date }}
+
+                            </div>
+
+                            {% if user.username == username %}
+                            <a class="btn btn-simple" href="{% url 'delete-work-experience' username=user.username pk=q.pk %}">DELETE</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-2"></div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+
     </div>
     {% endblock %}

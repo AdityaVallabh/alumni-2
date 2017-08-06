@@ -166,6 +166,11 @@ class Qualification(models.Model):
     convocation_year = models.SmallIntegerField()
 
 
+    @property
+    def program(self):
+        return AcademicProgram(self.program_code).name.capitalize()
+
+
 class WorkExperience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -174,7 +179,7 @@ class WorkExperience(models.Model):
     end_date = models.DateField(null=True)
     sector = models.CharField(max_length=50, null=True)
     designation = models.CharField(max_length=50)
-    founder = models.BooleanField(default=False)
+    founder = models.BooleanField(default=False, blank=True)
     location = models.OneToOneField(
         Address,
         on_delete=models.CASCADE

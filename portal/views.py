@@ -45,6 +45,10 @@ def view_profile(request, username):
                    User_SocialLinksForm.Meta.fields +\
                    User_PersonalInfoForm.Meta.fields
     }
+
+    context['experiences'] = WorkExperience.objects.filter(user=user).all()
+    context['qualifications'] = Qualification.objects.filter(user=user).all()
+
     context['gender'] = str(models.Gender(context['gender']))
     context['username'] = user.username
     context['permanent_address'] = profile.permanent_address
@@ -53,45 +57,6 @@ def view_profile(request, username):
 
     context['allowed_scopes'] = resolve_scope(request, username)
     return render(request, 'display_profile.html', context)
-
-
-# def view_profile(request, username):
-#     user = get_object_or_404(User, username=username)
-#     profile = UserProfile.objects.get(user=user)
-#     context = {
-#         key: getattr(profile, key, None)
-#         for key in User_SocialLinksForm.Meta.fields
-#     }
-#     context['username'] = user.username
-#     context['view_types'] = ['social']
-
-#     return render(request, 'display_profile.html', context)
-
-
-# def view_profile(request, username):
-#     user = get_object_or_404(User, username=username)
-#     profile = UserProfile.objects.get(user=user)
-#     context = {
-#         key: getattr(profile, key, None)
-#         for key in User_PersonalInfoForm.Meta.fields
-#     }
-#     context['username'] = user.username
-#     context['view_types'] = ['misc']
-
-#     context['allowed_scopes'] = resolve_scope(request, username)
-#     return render(request, 'display_profile.html', context)
-
-
-def view_work_experience(request, username):
-    user = get_object_or_404(User, username=username)
-    experiences = WorkExperience.objects.filter(user=user)
-    return render(request, 'experience.html', context={'experiences': experiences})
-
-
-def view_qualifications(request, username):
-    user = get_object_or_404(User, username=username)
-    qualification = Qualification.objects.filter(user=user)
-    return render(request, 'experience.html', context={'qualifications': qualification})
 
 
 @login_required
@@ -303,7 +268,7 @@ def add_work_experience(request, username):
             exp.user = request.user
             exp.location = Address.objects.get(pk=request.POST.get('address_pk'))
             exp.save()
-            return redirect(view_work_experience, username=username)
+            return redirect(view_profile, username=username)
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -322,7 +287,7 @@ def delete_work_experience(request, username, pk):
         return HttpResponse('Unauthorized', status=401)
 
     exp.delete()
-    return redirect(reverse(view_work_experience), args=[username])
+    return redirect(reverse(view_profile), args=[username])
 
 
 @login_required
@@ -341,7 +306,7 @@ def add_qualification(request, username):
             qual = form.save(commit=False)
             qual.user = request.user
             qual.save()
-            return redirect(view_work_experience, username=username)
+            return redirect(view_profile, username=username)
         else:
             context['form'] = form
             return render(request, 'generic_edit.html', context)
@@ -360,4 +325,4 @@ def delete_qualification(request, username, pk):
         return HttpResponse('Unauthorized', status=401)
 
     exp.delete()
-    return redirect(reverse(view_work_experience), args=[username])
+    return redirect(reverse(view_profile), args=[username])
