@@ -2,29 +2,37 @@
 <!-- {% load staticfiles %} -->
 {% block body %}
 
-<div class="container">
-    <form action="{{ submit_url }}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+    {#        <div class="main-container" >#}
+    <div class="container" style="background: white; max-width: 600px;">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10">
+                <form action="{{ submit_url }}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-        {% for field in form.visible_fields %}
+                    {% for field in form.visible_fields %}
 
-        <div class="form-group">
-            {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field.label_tag }} {{ field }}
+                        </div>
+
+                    {% endfor %}
+
+                    {% for field in form.hidden_fields %}
+                        <div>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <center>
+                        <button class="btn btn-primary" style="">Submit</button>
+                    </center>
+                </form>
+            </div>
         </div>
+    </div>
+    {#        </div>#}
 
-        {% endfor %}
 
-        {% for field in form.hidden_fields %}
-        <div>
-            {{ field }}
-        </div>
-        {% endfor %}
-
-        <button class="btn btn-primary">Submit</button>
-    </form>
-</div>
-
- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBVrSg4njrEoCofqhB-7w9RWv3wAr4uSb8&v=3.exp&sensor=false&libraries=places"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBVrSg4njrEoCofqhB-7w9RWv3wAr4uSb8&v=3.exp&sensor=false&libraries=places"></script>
 
 {% endblock %}
