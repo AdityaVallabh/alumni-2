@@ -65,7 +65,18 @@
     </div><!-- /.container-->
   </nav>
 
-  {% block body %} {% endblock %}
+
+  <div class="main container">
+    {% block body %} {% endblock %}
+  </div>
+
+  <style>
+   .clearfix {
+       min-height: 20px;
+   }
+  </style>
+  <div class="clearfix">
+  </div>
 
   <footer class="footer footer-white footer-big">
     <div class="container">

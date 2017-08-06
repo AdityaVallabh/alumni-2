@@ -280,33 +280,13 @@ def add_work_experience(request, username):
 
 
 @login_required
-def update_work_experience(request, username, idx=0):
+def delete_work_experience(request, username, pk):
     if username != request.user.username:
         return HttpResponse('Unauthorized', status=401)
-    context = {
-        'username': request.user.username,
-        'form': None,
-        'submit_url': reverse(update_basic, args=[username])
-    }
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        profile = None
 
-    if request.method == 'GET':
-        if profile is None:
-            context['form'] = User_BasicInfoForm()
-        else:
-            context['form'] = User_BasicInfoForm(initial=model_to_dict(profile))
-        return render(request, 'generic_edit.html', context)
-    else:
-        if profile is None:
-            form = User_BasicInfoForm(request.POST)
-        else:
-            form = User_BasicInfoForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse(view_basic, args=[context.get('username')]))
-        else:
-            context['form'] = form
-            return render(request, 'generic_edit.html', context)
+    exp = get_object_or_404(WorkExperience, pk=pk)
+    if exp.user.username != request.user.username:
+        return HttpResponse('Unauthorized', status=401)
+
+    exp.delete()
+    return redirect(reverse(view_work_experience), args=[username])

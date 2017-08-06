@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/misc/edit$', views.update_misc, name='edit-user-misc'),
 
     url(r'^(?P<username>\w+)/work_experience/add$', views.add_work_experience, name='add-user-work-experience'),
+    url(r'^(?P<username>\w+)/work_experience/delete/(?P<pk>\w+)', views.delete_work_experience, name='delete-work-experience'),
 
     url(r'^address/update/(?P<pk>\w+)$', views.update_address)
     # url(r'^(?P<username>\w+)/work_experience/edit', views.update_work_experience, name='edit-user-work-experience'),
