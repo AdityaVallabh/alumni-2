@@ -23,6 +23,9 @@ class LoginForm(forms.Form):
     username = forms.CharField(label='username')
     password = forms.CharField(label='password', widget=forms.PasswordInput)
 
+    username.widget.attrs.update({'class': 'form-control'})
+    password.widget.attrs.update({'class': 'form-control'})
+
 
 def login_view(request):
     if request.method == "GET":
