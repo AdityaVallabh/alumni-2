@@ -1,20 +1,27 @@
-{% for exp in experiences %}
-**
-<ul>
-    <li> {{ exp.employer }}
-    </li>
-    <li> {{ exp.start_date }}
-    </li>
-    <li> {{ exp.end_date }}
-    </li>
-    <li> {{ exp.sector }}
-    </li>
-    <li> {{ exp.designation }}
-    </li>
-    <li> {{ exp.founder }}
-    </li>
-    <li> {{ exp.location }}
-    </li>
-</ul>
+{% extends "base.html" %}
 
-{% endfor %}
+{% block body %}
+<div class="container">
+    <h2 class="title">Work Experiences</h2>
+    {% for exp in experiences %}
+    **
+        <ul>
+            <h4 class="title"><li> {{ exp.employer }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.start_date }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.end_date }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.sector }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.designation }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.founder }}
+            </li></h4>
+            <h4 class="title"><li> {{ exp.location }}
+            </li></h4>
+        </ul>
+
+    {% endfor %}
+</div>
+{% endblock %}
