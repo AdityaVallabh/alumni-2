@@ -9,6 +9,13 @@ class User_BasicInfoForm(ModelForm):
         model = UserProfile
         fields = ['name', 'email_1', 'date_of_birth', 'gender']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
+
 
 class User_MiscInfoForm(ModelForm):
     class Meta:
@@ -17,6 +24,13 @@ class User_MiscInfoForm(ModelForm):
                   'blood_group', 'photograph', 'nationality',
                   'scope_permanent_address', # removed address themselves
                   'scope_current_address']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
 
 
 class User_SocialLinksForm(ModelForm):
@@ -28,18 +42,41 @@ class User_SocialLinksForm(ModelForm):
                   'link_skype', 'scope_skype',
                   'link_github', 'link_blog', 'link_website']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
+
 
 class AddressForm(ModelForm):
+    username = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = Address
         fields = '__all__'
-        # set user_roll_no as hidden
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
+                # set user_roll_no as hidden
 
 
 class QualificationForm(ModelForm):
     class Meta:
         model = Qualification
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
 
 
 class WorkExperienceForm(forms.Form):
@@ -52,8 +89,22 @@ class WorkExperienceForm(forms.Form):
     # address_pk = forms.IntegerField(widget=forms.HiddenInput())
     address_pk = forms.IntegerField()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })
+
 
 class WorkExperienceModelForm(ModelForm):
     class Meta:
         model = WorkExperience
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+        })

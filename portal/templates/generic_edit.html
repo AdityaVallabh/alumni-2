@@ -21,15 +21,7 @@
         </div>
         {% endfor %}
 
-        <button>Submit</button>
-
-        {% if form.errors %}
-        <ul>
-            {% for error in form.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <button class="btn btn-primary">Submit</button>
     </form>
 </div>
 
