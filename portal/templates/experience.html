@@ -1,0 +1,20 @@
+{% for exp in experiences %}
+**
+<ul>
+    <li> {{ exp.employer }}
+    </li>
+    <li> {{ exp.start_date }}
+    </li>
+    <li> {{ exp.end_date }}
+    </li>
+    <li> {{ exp.sector }}
+    </li>
+    <li> {{ exp.designation }}
+    </li>
+    <li> {{ exp.founder }}
+    </li>
+    <li> {{ exp.location }}
+    </li>
+</ul>
+
+{% endfor %}

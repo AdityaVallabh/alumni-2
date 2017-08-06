@@ -42,7 +42,18 @@ class QualificationForm(ModelForm):
         fields = '__all__'
 
 
-class WorkExperienceForm(ModelForm):
+class WorkExperienceForm(forms.Form):
+    employer = forms.CharField()
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    sector = forms.CharField()
+    designation = forms.CharField()
+    founder = forms.BooleanField()
+    # address_pk = forms.IntegerField(widget=forms.HiddenInput())
+    address_pk = forms.IntegerField()
+
+
+class WorkExperienceModelForm(ModelForm):
     class Meta:
         model = WorkExperience
         fields = '__all__'
