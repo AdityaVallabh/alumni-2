@@ -237,6 +237,70 @@
 <!-- Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc -->
 <script src="{%static "js/material-kit.min.js" %}" type="text/javascript"></script>
 
+
+<!-- Google API Code -->
+ <!-- <script src="{%static "js/jquery.min.js" %}"></script> -->
+ <script src="{%static "js/bloodhound.js" %}"></script>
+ <script src="{%static "js/typeahead.jquery.js" %}"></script>
+ <script src="{%static "js/typeahead-addresspicker.js" %}"></script>
+ <script>
+  function displayResults(result, div) {
+    html = ["Address: " + result.address()]
+    html.push("Latitude: " + result.lat())
+    html.push("Longitude: " + result.lng())
+    html.push("Long names:")
+    result.addressTypes().forEach(function(type) {
+      html.push("  " + type + ": " + result.nameForType(type))
+    })
+    html.push("Short names:")
+    result.addressTypes().forEach(function(type) {
+      html.push("  " + type + ": " + result.nameForType(type, true))
+    })
+    html.push('Location selected');
+    div.html( html.join('\n'));
+  }
+
+  $( function() {
+    var addressPicker = new AddressPicker();
+    $('input#id_address_line_1').typeahead(null, {
+      displayKey: 'description',
+      source: addressPicker.ttAdapter()
+    });
+    addressPicker.bindDefaultTypeaheadEvent($('input#id_address_line_1'))
+    $(addressPicker).on('addresspicker:selected', function (event, result) { displayResults(result, $('#response1'))})
+    $(addressPicker).on('addresspicker:predictions', function(event, result) {
+      if (result && result.length > 0)
+        $('input#id_address_line_1').removeClass("empty")
+      else
+        $('input#id_address_line_1').addClass("empty")
+    })
+  })
+
+  $( function() {
+    alert("Hello")
+    // instantiate the addressPicker suggestion engine (based on bloodhound)
+    var addressPicker = new AddressPicker({map: {id: '#map'}, marker: {draggable: true, visible: true}, zoomForLocation: 18, reverseGeocoding: true});
+
+    // instantiate the typeahead UI
+    console.log("hello");
+    $('input#id_address_line_2').typeahead(null, {
+      displayKey: 'description',
+      source: addressPicker.ttAdapter()
+    });
+    addressPicker.bindDefaultTypeaheadEvent($('input#id_address_line_2'))
+    $(addressPicker).on('addresspicker:selected', function (event, result) {
+      displayResults(result, $('#response2'))
+      if (result.isReverseGeocoding()) {
+        $('input#id_address_line_2').val(result.address());
+        console.log(result.address());
+      }
+    });
+  })
+
+  </script>
+
+  <!-- Google API script Ends -->
+
 <!-- Fixed Sidebar Nav - JS For Demo Purpose, Don't Include it in your project -->
 <!-- <script src="assets/assets-for-demo/modernizr.js" type="text/javascript"></script>
   <script src="assets/assets-for-demo/vertical-nav.js" type="text/javascript"></script> -->
