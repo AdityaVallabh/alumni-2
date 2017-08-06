@@ -2,10 +2,15 @@
 
 {% block body %}
 
+
+<style>
+ div { font-weight: 400; }
+</style>
+
 <div class="container">
     <ul class="nav nav-pills nav-pills-rose">
         <li class="active"><a href="#pill1" data-toggle="tab">Basic</a></li>
-        <li><a href="#pill2" data-toggle="tab">Social</a></li>
+        <!-- <li><a href="#pill2" data-toggle="tab">Social</a></li> -->
         <li><a href="#pill3" data-toggle="tab">Personal</a></li>
         <li><a href="#pill4" data-toggle="tab">Educational Qualifications</a></li>
         <li><a href="#pill5" data-toggle="tab">Work Experience</a></li>
@@ -18,100 +23,221 @@
             <a class="btn btn-primary btn-sm" href="{% url 'edit-user-basic' username=user.username %}">Edit</a>
             {% endif %}
 
-            <ul>
-                <h4 class="title"><li>Photograph: <img src="{{ photograph }}"></li></h4>
-                <h4 class="title"><li>User name: {{ username }}</li></h4>
-                <h4 class="title"><li>Name : {{ name }}</li></h4>
-                <h4 class="title"><li>Primary Email : {{ email_1 }}</li></h4>
-                <h4 class="title"><li>Date of birth : {{ date_of_birth }}</li></h4>
-                <h4 class="title"><li>Gender : {{ gender }}</li></h4>
-            </ul>
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                    <img src="{{ photograph }}" alt="Image not available" />
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-title">{{ name }}</div>
+                            <div class="category text-gray">{{ username }}</div>
+                            {{ email_1 }} <br />
+                            {{ date_of_birth }} <br />
+                            {{ gender }} <br />
+                            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-basic' username=user.username %}">EDIT</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- social links -->
+                <div class="col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="card-content">
+
+                            <style>
+                             a {
+                                 text-decoration: none;
+                                 color: inherit;
+                             }
+                            </style>
+
+                            <ul style="list-style-type:none; padding-left:0">
+                                {% if scope_facebook in allowed_scopes and link_facebook %}
+                                <li>
+                                    <a href="https://fb.com/{{ link_facebook }}">
+                                        <i class="fa fa-facebook"></i><span>&nbsp;&nbsp;</span>
+                                        {{ link_facebook }}
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if scope_twitter in allowed_scopes and link_twitter %}
+                                <li>
+                                    <a href="https://twitter.com/{{ link_twitter }}">
+                                        <i class="fa fa-twitter"></i><span>&nbsp;&nbsp;</span>
+                                        {{ link_twitter }}
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if scope_linkedin in allowed_scopes and link_linkedin %}
+                                <li>
+                                    <a href="https://linkedin.com/in/{{ link_linkedin }}">
+                                        <i class="fa fa-linkedin"></i><span>&nbsp;&nbsp;</span>
+                                        {{ link_linkedin }}
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if scope_skype in allowed_scopes and link_skype %}
+                                <li>
+                                    <a href="{{ link_skype }}">
+                                        <i class="fa fa-skype"></i><span>&nbsp;&nbsp;</span>
+                                        {{ link_skype }}
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if link_github %}
+                                <li>
+                                    <a href="https://github.com/{{ link_github }}">
+                                        <i class="fa fa-github"><span>&nbsp;&nbsp;</span></i>
+                                        {{ link_github }}
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if link_blog %}
+                                <li>
+                                    <a href="{{ link_github }}">
+                                        <i class="fa fa-blog"><span>&nbsp;&nbsp;</span></i>
+                                        Blog
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% if link_website %}
+                                <li>
+                                    <a href="{{ link_github }}">
+                                        <i class="fa fa-globe"><span>&nbsp;&nbsp;</span></i>
+                                        Website
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                            </ul>
+
+                            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-social' username=user.username %}">EDIT</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="tab-pane" id="pill2">
-
-            {% if user.username == username %}
-            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-social' username=user.username %}">Edit</a>
-            {% endif %}
-
-            <ul>
-                {% if scope_facebook in allowed_scopes %}
-                <h4 class="title"><li>Facebook: {{ link_facebook }}</li></h4>
-                {% endif %}
-
-                {% if scope_twitter in allowed_scopes %}
-                <h4 class="title"><li>Twitter: {{ link_twitter }} {{ scope_twitter }}</li></h4>
-                {% endif %}
-
-                {% if scope_linkedin in allowed_scopes %}
-                <h4 class="title"><li>LinkedIn: {{ link_linkedin }} {{ scope_linkedin }}</li></h4>
-                {% endif %}
-
-                {% if scope_skype in allowed_scopes %}
-                <h4 class="title"><li>Skype: {{ link_skype }} {{ scope_skype }}</li></h4>
-                {% endif %}
-
-                <h4 class="title"><li>GitHub: {{ link_github }}</li></h4>
-                <h4 class="title"><li>Blog: {{ link_blog }}</li></h4>
-                <h4 class="title"><li>Website: {{ link_website }}</li></h4>
-            </ul>
-        </div>
 
         <div class="tab-pane" id="pill3">
-            <ul>
 
-                {% if user.username == username %}
-                <a class="btn btn-primary btn-sm" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
-                {% endif %}
+            {% if user.username == username %}
+            <a class="btn btn-primary btn-sm" href="{% url 'edit-user-personal' username=user.username %}">Edit</a>
+            {% endif %}
 
-                <h4 class="title"><li>Email 2: {{ email_2 }}</li></h4>
-                <h4 class="title"><li>Phone 1: {{ phone_1 }}</li></h4>
-                <h4 class="title"><li>Phone 2: {{ phone_2 }}</li></h4>
-                <h4 class="title"><li>Marital Status: {{ marital_status }}</li></h4>
-                <h4 class="title"><li>Blood group: {{ blood_group }}</li></h4>
-                <h4 class="title"><li>Nationality: {{ nationality }}</li></h4>
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-5 col-lg-5" style="font-weight: 400">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="title">Email</span> {{ email_2 }}
+                                <br/>
+                                <span class="title">Phone</span> {{ phone_1 }} &nbsp; {{ phone_2 }}
+                                <br/>
+                                <span class="title">Marital status</span> {{ marital_status }}
+                                <span class="title">Blood Group</span> {{ blood_group }}
+                                <br/>
+                                <span class="title">Nationality</span> {{ nationality }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    {% if scope_permanent_address in allowed_scopes %}
+                    <div class="col-md-5 col-lg-5">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Permanent address</span>
+                                <a
+                                    href="{% url 'edit-permanent-address' username=user.username %}"
+                                    class="btn btn-primary btn-sm" style="float: right;margin-top: 0px;">
+                                    EDIT
+                                </a>
+                            </div>
+
+                            <div class="card-content">
+                                <table class="table">
+                                    <tr>
+                                        <td class="title">Address Line 1</td> <td>{{ address_line_1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">Address Line 2</td> <td>{{ address_line_2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">City</td> <td>{{ city }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">State/Province</td> <td>{{ state }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">Country</td> <td>{{ country }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">ZIP Code</td> <td>{{ zip_code }}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
 
 
-                {% if scope_permanent_address in allowed_scopes %}
-                <h4 class="title">
-                    <li>Permanent Address:
-                        <ul>
-                            <h6 class="title"><li>Address Line 1: {{ permanent_address.address_line_1 }}</li></h6>
-                            <h6 class="title"><li>Address Line 2: {{ permanent_address.address_line_2 }}</li></h6>
-                            <h6 class="title"><li>City: {{ permanent_address.city }}</li></h6>
-                            <h6 class="title"><li>State: {{ permanent_address.state }}</li></h6>
-                            <h6 class="title"><li>Country: {{ permanent_address.country }}</li></h6>
-                            <h6 class="title"><li>Zip Code: {{ permanent_address.zip_code }}</li></h6>
-                        </ul>
+                    {% if scope_current_address in allowed_scopes %}
+                    <div class="col-md-5 col-lg-5">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Current address</span>
+                                <a
+                                    href="{% url 'edit-current-address' username=user.username %}"
+                                    class="btn btn-primary btn-sm" style="float: right;margin-top: 0px;">
+                                    EDIT
+                                </a>
+                            </div>
 
-                        {% if user.username == username %}
-                        <a class="btn btn-primary" href="{% url 'edit-permanent-address' username=user.username %}">Edit</a>
-                        {% endif %}
+                            <div class="card-content">
+                                <table class="table">
+                                    <tr>
+                                        <td class="title">Address Line 1</td> <td>{{ address_line_1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">Address Line 2</td> <td>{{ address_line_2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">City</td> <td>{{ city }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">State/Province</td> <td>{{ state }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">Country</td> <td>{{ country }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">ZIP Code</td> <td>{{ zip_code }}</td>
+                                    </tr>
 
-                    </li>
-                </h4>
-                {% endif %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
-                {% if scope_current_address in allowed_scopes %}
-                <h4 class="title">
-                    <li>Current Address:
-                        <ul>
-                            <h6 class="title"><li>Address Line 1: {{ current_address.address_line_1 }}</li></h6>
-                            <h6 class="title"><li>Address Line 2: {{ current_address.address_line_2 }}</li></h6>
-                            <h6 class="title"><li>City: {{ current_address.city }}</li></h6>
-                            <h6 class="title"><li>State: {{ current_address.state }}</li></h6>
-                            <h6 class="title"><li>Country: {{ current_address.country }}</li></h6>
-                            <h6 class="title"><li>Zip Code: {{ current_address.zip_code }}</li></h6>
-                        </ul>
+                </div>
+            </div>
 
-                        {% if user.username == username %}
-                        <a class="btn btn-primary" href="{% url 'edit-current-address' username=user.username %}">Edit</a>
-                        {% endif %}
-
-                    </li>
-                </h4>
-                {% endif %}
-            </ul>
         </div>
 
 
@@ -166,11 +292,11 @@
                 <div class="row">
 
                     {% for q in qualifications %}
-                    <div class="col-md-5 col-lg-5" style="font-weight: 400">
+                    <div class="col-md-3 col-lg-3" style="font-weight: 400">
                         <div class="card">
 
                             <div class="card-content">
-                                {{ q.program }} <br/>
+                                <span class="title">{{ q.program }}</span> <br/>
                                 {{ q.institute_name }} <br/>
 
                                 {% if start_date or end_date %}
