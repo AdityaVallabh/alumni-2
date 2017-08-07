@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -25,6 +27,8 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/qualification/add$', views.add_qualification, name='add-user-qualification'),
     url(r'^(?P<username>\w+)/qualification/delete/(?P<pk>\w+)', views.delete_qualification, name='delete-qualification'),
 
-    url(r'^address/update/(?P<pk>\w+)$', views.update_address)
+    url(r'^address/update/(?P<pk>\w+)$', views.update_address),
     # url(r'^(?P<username>\w+)/work_experience/edit', views.update_work_experience, name='edit-user-work-experience'),
+    static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)[0],
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)[0],
 ]
